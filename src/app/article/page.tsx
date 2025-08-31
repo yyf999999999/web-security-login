@@ -3,7 +3,7 @@
 import { use, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import useSWR, { mutate } from "swr";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import { twMerge } from "tailwind-merge";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
