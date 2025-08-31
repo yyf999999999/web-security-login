@@ -43,8 +43,10 @@ const getUserPermissionLevel = (isLoggedIn: boolean, userRole: Role | null) => {
   return 0; // その他: 公開記事のみ
 };
 
-export const GET = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export const GET = async (req: NextRequest, context: { params: Promise<{ id: string }> }) => {
   try {
+    const params = await context.params;
+
     const { isLoggedIn, userRole } = await getAuthFromRequest();
     const userPermissionLevel = getUserPermissionLevel(isLoggedIn, userRole);
 
