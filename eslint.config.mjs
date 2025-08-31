@@ -10,7 +10,22 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.extends(
+    "next/core-web-vitals",
+    "next/typescript",
+    // "plugin:import/recommended",
+    // "plugin:tailwindcss/recommended",
+  ),
+  {
+    settings: {
+      tailwindcss: {
+        callees: ["cn", "twMerge", "tv"],
+      },
+    },
+    rules: {
+      "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
 ];
 
 export default eslintConfig;
