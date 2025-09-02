@@ -28,13 +28,22 @@ export const POST = async (req: NextRequest) => {
     const user = await prisma.user.findUnique({
       where: { email: loginRequest.email },
     });
+
     if (!user) {
-      // 💀 このアカウント（メールアドレス）の有効無効が分かってしまう。
       const res: ApiResponse<null> = {
         success: false,
         payload: null,
-        message: "このメールアドレスは登録されていません。",
-        // message: "メールアドレスまたはパスワードの組み合わせが正しくありません。",
+        message: "メールアドレスまたはパスワードの組み合わせが正しくありません。",
+      };
+      return NextResponse.json(res);
+    }
+
+    // メール認証チェックを追加
+    if (!user.emailVerified) {
+      const res: ApiResponse<null> = {
+        success: false,
+        payload: null,
+        message: "メールアドレスの認証が完了していません。認証メールをご確認ください。",
       };
       return NextResponse.json(res);
     }

@@ -52,12 +52,14 @@ const Page: React.FC = () => {
     return () => subscription.unsubscribe();
   }, [formMethods]);
 
-  // ログイン完了後のリダイレクト処理
+  // 入力後のメール認証処理
   useEffect(() => {
     if (isSignUpCompleted) {
-      router.replace(`/login?${c_Email}=${formMethods.getValues(c_Email)}`);
+      // メール認証画面にリダイレクト
+      const email = formMethods.getValues(c_Email);
+      router.replace(`/verify-email?email=${encodeURIComponent(email)}`);
       router.refresh();
-      console.log("サインアップ完了");
+      console.log("サインアップ完了 - メール認証が必要");
     }
   }, [formMethods, isSignUpCompleted, router]);
 
