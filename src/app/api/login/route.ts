@@ -38,7 +38,7 @@ export const POST = async (req: NextRequest) => {
       return NextResponse.json(res);
     }
 
-    // メール認証チェックを追加
+    // メール認証チェック
     if (!user.emailVerified) {
       const res: ApiResponse<null> = {
         success: false,

@@ -3,7 +3,6 @@
 import { use, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import useSWR, { mutate } from "swr";
-// import Cookies from "js-cookie";
 import { twMerge } from "tailwind-merge";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -19,9 +18,7 @@ import type { ApiResponse } from "@/app/_types/ApiResponse";
 
 const Page: React.FC = () => {
   const ep = "/api/article";
-  // const [region, setRegion] = useState<Region>(Region.OSAKA);
   const [articles, setArticles] = useState<Article[]>([]);
-  // const [regionDisplayName, setRegionDisplayName] = useState<string>("");
   const [name, setName] = useState<string | null>(null);
 
   const { userProfile } = useAuth();
@@ -35,31 +32,17 @@ const Page: React.FC = () => {
     return 0; // その他: 公開記事のみ
   };
 
-  // Cookie をセットする関数の定義
-  /*const setSessionCookie = useCallback(() => {
-    Cookies.set({
-      expires: 7, // 有効期限（7日間）
-      // path: "/api/news", // 💀 省略すると "/" が設定される
-      // sameSite: "strict", // 💀 適切に設定しないとCSRF脆弱性が生じる
-      secure: false, // 💀 本番環境(HTTPS)では true にすべき
-    });
-    // 👆 セキュアに利用する観点から各設定の意味を調べてみてください
-  }, []);*/
-
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    setName(params.get("name")); // 💀 サニタイズ（無害化）ぜずに値を格納
+    const rawName = params.get("name");
+    
+    // サニタイズ処理を追加
+    if (rawName) {
+      // HTMLタグを除去して安全な文字列のみを使用
+      const sanitizedName = rawName.replace(/<[^>]*>/g, '').slice(0, 50);
+      setName(sanitizedName);
+    }
   }, []);
-
-  // useEffect(() => {
-  //   const regionStr = Cookies.get("region");
-  //   // Cookieが存在しない もしくはデタラメな値の場合は OSAKA をセットする
-  //   if (!regionStr || !Object.values(Region).includes(regionStr as Region)) {
-  //     setSessionCookie(Region.OSAKA);
-  //     return;
-  //   }
-  //   setRegion(regionStr as Region); // Cookieから取得した地域をセット
-  // }, [setSessionCookie]);
 
   // 初回 のタイミングでニュース記事を取得【基本的な実装】
   const [isLoading, setIsLoading] = useState(true);
@@ -85,42 +68,7 @@ const Page: React.FC = () => {
       }
     };
     fetchArticles();
-  }, []); // regionの依存関係を削除
-
-  //【💡SWRを利用した実装】
-  // const fetcher = useCallback(async (endPoint: string) => {
-  //   const res = await fetch(endPoint, {
-  //     credentials: "same-origin",
-  //     cache: "no-store",
-  //   });
-  //   return res.json();
-  // }, []);
-
-  // const { data: news, isLoading } = useSWR<ApiResponse<NewsItem[]>>(
-  //   ep,
-  //   fetcher,
-  // );
-
-  // useEffect(() => {
-  //   if (news && news.success) setNewsItems(news.payload);
-  // }, [news]);
-
-  // useEffect(() => {
-  //   mutate(ep); // 再検証(キャッシュ無効化して再取得)
-  // }, [region]);
-
-  /*useEffect(() => {
-    setRegionDisplayName(regionDisplayNames[region]);
-  }, [region]);
-
-  // 地域の変更操作
-  const changeRegion = async (newRegion: Region) => {
-    if (region === newRegion) return;
-    console.log("newRegion:", newRegion);
-    setRegion(newRegion);
-    // Cookieに保存（クライアントサイドで Cookie を直接操作）
-    setSessionCookie(newRegion);
-  };*/
+  }, []);
 
   // データの取得中の画面出力
   if (isLoading) {
@@ -150,8 +98,7 @@ const Page: React.FC = () => {
 
       {name && (
         <div className="mt-4 ml-4 flex text-sm text-slate-600">
-          {/* サニタイズされていない値を dangerouslySetInnerHTML で出力（💀超危険） */}
-          <span dangerouslySetInnerHTML={{ __html: name }} className="mr-1" />
+          <span className="mr-1">{name}</span>
           さん、こんにちは！
         </div>
       )}
@@ -169,26 +116,6 @@ const Page: React.FC = () => {
           );
         })}
       </div>
-
-      {/*<div className="mt-6 flex items-center gap-x-3">
-        <div className="text-blue-500">
-          <FontAwesomeIcon icon={faStreetView} className="mr-1" />
-          地域を選択
-        </div>
-        <div>
-          <select
-            onChange={async (e) => await changeRegion(e.target.value as Region)}
-            value={region}
-            className="border-2 px-1"
-          >
-            {Object.values(Region).map((regionValue) => (
-              <option key={regionValue} value={regionValue}>
-                {regionDisplayNames[regionValue]} ({regionValue})
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>*/}
 
       <div className="mt-4 text-sm text-slate-600">
         <p>

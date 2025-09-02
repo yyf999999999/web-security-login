@@ -24,7 +24,7 @@ export const verifySession = async (): Promise<string | null> => {
       httpOnly: true,
       sameSite: "strict",
       maxAge: 0,
-      secure: false, // 本番は true に
+      secure: true,
     });
     return null;
   }

@@ -13,6 +13,7 @@ export const userSeedSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
   role: roleSchema,
+  emailVerified: z.boolean().optional(),
   aboutSlug: aboutSlugSchema.optional(),
   aboutContent: aboutContentSchema.optional(),
 });
