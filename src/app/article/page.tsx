@@ -25,6 +25,7 @@ const Page: React.FC = () => {
   const isLoggedIn = !!userProfile;
   const userRole = userProfile?.role || null;
 
+  // ユーザーの権限レベルを取得する関数
   const getUserPermissionLevel = () => {
     if (!isLoggedIn) return 0; // 未ログイン: 公開記事(permission: 0)のみ
     if (userRole === Role.USER) return 1; // 一般ユーザー: permission 1まで表示可能
@@ -122,10 +123,10 @@ const Page: React.FC = () => {
           ※ デベロッパーツール (F12)
           を起動して「アプリケーション」から「ストレージ」の「Cookie」を確認してください。
         </p>
-        <p>※ このコンテンツは、ログインの有無に関係なく機能します。</p>
+        <p>※ このコンテンツは、ログインの有無によって表示内容が変わります。</p>
         <p className="text-rose-500">
           ※
-          このコンテンツには、クロスサイトスクリプティング（XSS）が成立し得る深刻な脆弱性が含まれています。
+          このコンテンツは、クロスサイトスクリプティング（XSS）が成立し得る深刻な脆弱性が修正されています。
         </p>
       </div>
     </main>
