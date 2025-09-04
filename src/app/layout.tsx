@@ -8,7 +8,7 @@ import AuthProvider from "@/app/_contexts/AuthContext";
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
-  title: "WebSecPlayground",
+  title: "WebSecurityLogin",
   description: "...",
 };
 

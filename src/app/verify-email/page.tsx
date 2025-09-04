@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { verifyCodeRequestSchema, VerifyCodeRequest } from "@/app/_types/EmailVerification";
@@ -13,7 +13,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faEnvelope, faCheck } from "@fortawesome/free-solid-svg-icons";
 import type { ApiResponse } from "@/app/_types/ApiResponse";
 
-const Page: React.FC = () => {
+// 実際のページコンポーネント
+const VerifyEmailContent: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, setIsPending] = useState(false);
@@ -204,6 +205,27 @@ const Page: React.FC = () => {
         </form>
       </div>
     </main>
+  );
+};
+
+const LoadingSpinner: React.FC = () => (
+  <main className="mx-4 max-w-md md:mx-auto">
+    <div className="mt-8 text-center">
+      <FontAwesomeIcon
+        icon={faSpinner}
+        spin
+        className="mb-4 text-4xl text-blue-500"
+      />
+      <p className="text-gray-600">読み込み中...</p>
+    </div>
+  </main>
+);
+
+const Page: React.FC = () => {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <VerifyEmailContent />
+    </Suspense>
   );
 };
 
