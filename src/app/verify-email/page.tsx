@@ -1,6 +1,7 @@
+// src/app/verify-email/page.tsx
 "use client";
 
-import React, { Suspense, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { verifyCodeRequestSchema, VerifyCodeRequest } from "@/app/_types/EmailVerification";
@@ -8,15 +9,13 @@ import { TextInputField } from "@/app/_components/TextInputField";
 import { ErrorMsgField } from "@/app/_components/ErrorMsgField";
 import { Button } from "@/app/_components/Button";
 import NextLink from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation"; // ← useSearchParamsを削除
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faEnvelope, faCheck } from "@fortawesome/free-solid-svg-icons";
 import type { ApiResponse } from "@/app/_types/ApiResponse";
 
-// 実際のページコンポーネント
-const VerifyEmailContent: React.FC = () => {
+const Page: React.FC = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [isPending, setIsPending] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [isResending, setIsResending] = useState(false);
@@ -35,11 +34,12 @@ const VerifyEmailContent: React.FC = () => {
   };
 
   useEffect(() => {
-    const email = searchParams.get("email");
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get("email");
     if (email) {
       formMethods.setValue("email", email);
     }
-  }, [formMethods, searchParams]);
+  }, [formMethods]);
 
   useEffect(() => {
     if (isVerified) {
@@ -205,27 +205,6 @@ const VerifyEmailContent: React.FC = () => {
         </form>
       </div>
     </main>
-  );
-};
-
-const LoadingSpinner: React.FC = () => (
-  <main className="mx-4 max-w-md md:mx-auto">
-    <div className="mt-8 text-center">
-      <FontAwesomeIcon
-        icon={faSpinner}
-        spin
-        className="mb-4 text-4xl text-blue-500"
-      />
-      <p className="text-gray-600">読み込み中...</p>
-    </div>
-  </main>
-);
-
-const Page: React.FC = () => {
-  return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <VerifyEmailContent />
-    </Suspense>
   );
 };
 

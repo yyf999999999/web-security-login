@@ -160,10 +160,10 @@ const Page: React.FC = () => {
         <div>
           <div className="mt-4 flex items-center gap-x-2">
             <FontAwesomeIcon icon={faSpinner} spin />
-            <div>サインアップが完了しました。ログインページに移動します。</div>
+            <div>サインアップが完了しました。メール認証ページに移動します。</div>
           </div>
           <NextLink
-            href={`/login?${c_Email}=${formMethods.getValues(c_Email)}`}
+            href={`/verify-email?${c_Email}=${formMethods.getValues(c_Email)}`}
             className="text-blue-500 hover:underline"
           >
             自動的に画面が切り替わらないときはこちらをクリックしてください。
