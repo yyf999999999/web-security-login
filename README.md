@@ -22,7 +22,7 @@ web-sec-playgroundからあった標準的な機能です。
 - **一般ユーザー**: permission 1まで閲覧可能  
 - **管理者**: 全記事（permission 2まで）閲覧可能
 
-![管理者アカウントから見た記事一覧](images/articles.png)
+![管理者アカウントから見た記事一覧](public/images/articles.png)
 
 **実装したコードのパス:**
 - `src/app/article/page.tsx`
@@ -35,7 +35,7 @@ Gmail SMTPを使用した本人確認機能を実装しました。私の個人�
 - 認証完了までログイン制限
 - 認証コード再送信機能
 
-![メール認証画面](images/mailCert.png)
+![メール認証画面](public/images/mailCert.png)
 
 **実装したコードのパス:**
 - `src/app/verify-email/page.tsx`
@@ -101,7 +101,7 @@ src/app/
 - メール認証のセキュリティ: 認証コードに有効期限を設け、使用済みコードを自動削除することでセキュリティを向上させました。
 - 認証方式の検証: どのファイルがセッションベース認証でどのファイルがトークンベース認証なのか検証するのが大変でした。
 - Gmail設定: Gmailでアプリパスワードを設定する項目がなかなか見つからず苦労しました
-![権限が無いユーザーがアクセスした場合](images/nothingAuth.png)
+![権限が無いユーザーがアクセスした場合](public/images/nothingAuth.png)
 
 ## テスト用データ
 - ADMIN: admin01@example.com / password1111, admin02@example.com / password2222
